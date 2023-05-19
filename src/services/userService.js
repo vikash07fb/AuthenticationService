@@ -67,6 +67,17 @@ class UserService {
             throw ({ error })
         }
     }
+
+    async isAuthenticated(token){
+        try {
+            const response = this.verifyToken(token,JWT_KEY);
+            console.log(response);
+            return response;
+        } catch (error) {
+            console.log(`Something went wrong in verifying the token`, error);
+            throw ({ error })
+        }
+    }
 }
 
 

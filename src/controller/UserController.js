@@ -43,7 +43,28 @@ const signin = async function(req,res){
         })
     }
 }
+
+const isAuthenticated = async function(req,res){
+
+    try {
+        const response = await userService.isAuthenticated(req.headers.x_token);
+
+        return res.status(201).json({
+            data : {email : response.email, id: response.id},
+            success : true ,
+            err : {}
+        })
+    } catch (error) {
+        return res.status(500).json({
+            data: {},
+            success: false,
+            err : {error}
+        })
+    }
+   
+}
 module.exports ={
     createUser,
-    signin
+    signin,
+    isAuthenticated
 }

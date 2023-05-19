@@ -1,5 +1,5 @@
 function requestValidator(req,res,next){
-    if(!req.email || !req.password){
+    if(!req.body.email || !req.body.password){
         return res.status(400).json({
              success:false,
             message : `Either password or email is missing`,
