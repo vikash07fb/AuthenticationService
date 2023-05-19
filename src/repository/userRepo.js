@@ -34,6 +34,20 @@ class UserRepository{
             throw({error});
         }
     }
+    async getByEmail(emailId){
+        try {
+           const user = await User.findOne({
+            where :{
+                email : emailId
+            }
+           });
+
+           return user;
+        } catch (error) {
+            console.log("Something went wrong in repo layer");
+            throw({error});
+        }
+    }
     async delete(userId){
         try {
             await User.destroy({
