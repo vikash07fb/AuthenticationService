@@ -1,14 +1,18 @@
-const { response } = require("express");
+// const { response } = require("express");
 const UserService = require("../services/userService");
+const { StatusCodes } = require('http-status-codes');
 
 const userService = new UserService();
 
 const createUser = async function(req,res){
     try {
+      
         const Userdata = await userService.createUser({
-            email: req.body.email,
+            email: req.body.email ,
             password: req.body.password
         })
+
+        console.log(Userdata)
         return res.status(201).json({
             data: Userdata,
             success : true,
@@ -16,10 +20,12 @@ const createUser = async function(req,res){
             err : {}
         })
     } catch (error) {
-        return res.status(500).json({
+       
+        return res.status(error.statusCode).json({
             data: {},
             success: false,
-            err : {error}
+            message: error.message,
+            err : error.explanation
         })
     }
 }
@@ -63,8 +69,33 @@ const isAuthenticated = async function(req,res){
     }
    
 }
+
+const isAdmin = async function(req,res){
+
+    try {
+        const response = await userService.isAdmin(req.body.id);
+
+
+        return res.status(201).json({
+            data : response,
+            success : true ,
+            err : {}
+        })
+    } catch (error) {
+        return res.status(500).json({
+            data: {},
+            success: false,
+            err : {error}
+        })
+    }
+   
+}
+
+
 module.exports ={
     createUser,
     signin,
-    isAuthenticated
+    isAuthenticated,
+    isAdmin
+   
 }

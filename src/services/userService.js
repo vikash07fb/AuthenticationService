@@ -11,11 +11,13 @@ class UserService {
     async createUser(data) {
         try {
             const user = await this.userRepository.create(data);
-
             return user;
         } catch (error) {
-            console.log("Someting wrong in the service layer");
-            throw ({ error });
+            if(error.name==="SequelizeValidationError"){
+                throw error;
+            }
+            console.log("Something went wrong in the service layer");
+            throw error;
         }
     }
 
@@ -68,14 +70,25 @@ class UserService {
         }
     }
 
-    async isAuthenticated(token){
+    async isAuthenticated(token) {
         try {
-            const response = this.verifyToken(token,JWT_KEY);
+            const response = this.verifyToken(token, JWT_KEY);
             console.log(response);
             return response;
         } catch (error) {
             console.log(`Something went wrong in verifying the token`, error);
             throw ({ error })
+        }
+    }
+
+    async isAdmin(userId) {
+        try {
+            const user = await this.userRepository.isAdmin(userId);
+            return user;
+
+        } catch (error) {
+            console.log("Someting wrong in the service layer");
+            throw ({ error });
         }
     }
 }
